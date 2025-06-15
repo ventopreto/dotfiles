@@ -1,0 +1,85 @@
+format = """
+$directory\
+[](fg:#212736 bg:#1d2230)\
+$git_branch\
+$git_status\
+[](fg:#212736 bg:#1d2230)\
+$nodejs\
+$rust\
+$golang\
+$php\
+$time\
+[ ](fg:#1d2230)\
+\n$character"""
+
+[username]
+show_always = true
+style_user = "bg:#9A348E"
+style_root = "bg:#9A348E"
+format = '[$user ]($style)'
+disabled = false
+
+# An alternative to the username module which displays a symbol that
+# represents the current operating system
+[os]
+style = "bg:#9A348E"
+disabled = true # Disabled by default
+
+[directory]
+style = "bold bg:#1d2230 fg:#0087ff"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[git_branch]
+symbol = ""
+style = "bg:#1d2230"
+truncation_length = 20
+truncation_symbol = "…/"
+format = '[[ $symbol $branch ](fg:green bg:#1d2230)]($style)'
+
+[git_status]
+style = "bg:#1d2230"
+ahead = ' [⇡${count}](bg:#1d2230 bold green)'
+modified = ' [!${count}](bg:#1d2230 bold yellow)'
+stashed = ' [*${count}](bg:#1d2230 bold blue)'
+staged = ' [+${count}](bg:#1d2230 bold #0B9070)'
+diverged = '[⇕⇡${ahead_count}⇣${behind_count}](bg:#1d2230 bold magenta)'
+behind = ' [⇣${count}](bg:#1d2230 bold red)'
+format = '[[($all_status$ahead_behind )](fg:#769ff0 bg:#1d2230)]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[rust]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[golang]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[php]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[time]
+disabled = false
+time_format = "%R" # Hour:Minute Format
+style = "bg:#1d2230"
+format = '[[  $time ](fg:#769ff0 bg:#1d2230)]($style)'
+
+[ruby]
+style = 'bold red'
+format = '[($version )]($style)'

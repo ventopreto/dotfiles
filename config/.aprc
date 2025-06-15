@@ -1,0 +1,31 @@
+# ~/.aprc
+
+AmazingPrint.defaults = {
+  indent: 2,
+  index: true,
+  sort_keys: true,
+  plain: false, # true = sem cores(bom pra logs), false = com cores
+  multiline: true,
+  ruby19_syntax: true,
+  object_id: false,
+  class_name: :class,
+  color: {
+    array: :cyan,
+    bigdecimal: :blue,
+    class: :yellow,
+    date: :green,
+    falseclass: :red,
+    float: :blue,
+    hash: :white,
+    keyword: :magenta,
+    method: :purpleish,
+    nilclass: :red,
+    numeric: :blue,
+    string: :yellow,
+    struct: :pale,
+    symbol: :cyanish,
+    time: :greenish,
+    trueclass: :green,
+    variable: :cyanish
+  }
+}
