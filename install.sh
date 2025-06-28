@@ -21,6 +21,7 @@ if [ -n "${SUDO_USER:-}" ]; then
 else
     USER_NAME="$(id -un)"
 fi
+PROJECT_DIR="$(pwd)"
 HOME_DIR="/home/$USER_NAME"
 [ "$USER_NAME" = "root" ] && HOME_DIR="/root"
 
@@ -33,7 +34,6 @@ sudo apt install -y -qq \
     curl \
     wget \
     git \
-    zsh \
     lsb-release \
     apt-transport-https \
     ca-certificates \
@@ -54,21 +54,18 @@ sudo apt install -y -qq \
 msg "Instalando as fontes..."
 {
 mkdir -p "$HOME_DIR/.fonts"
-sudo cp -r ./fonts/* "$HOME_DIR/.fonts/" 2>/dev/null || exit 1
+sudo cp -r $PROJECT_DIR/fonts/* "$HOME_DIR/.fonts/" 2>/dev/null || exit 1
 sudo chown -R "$USER_NAME:$USER_NAME" "$HOME_DIR/.fonts" 2>/dev/null
 fc-cache -f
 }
 
 msg "Instalando o TPM..."
 {
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm >/dev/null 2>&1
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 }
 
 msg "Instalando Tmux e cappicin..."
 cp ./config/.tmux.conf "$HOME_DIR/.tmux.conf"
-
-msg "Instalando zoxide..."
-curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh -s -- -q > /dev/null 2>&1
 
 msg "Instalando o Nushell..."
 curl -fsSL https://apt.fury.io/nushell/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/fury-nushell.gpg
@@ -80,29 +77,16 @@ msg "Instalando o Starship..."
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --yes > /dev/null
 
 msg "Configurando Nushell..."
-cp -r ./config/.config/ ~/ &> /dev/null
+cp -r "$PROJECT_DIR/config/.config/" ~/ &> /dev/null
 
 msg "Definindo o Nushell como shell padrão..."
 chsh -s $(which nu)
 
-msg "Configurando PATH para o asdf no Nushell..."
-{
-  echo '$env.PATH = ($env.PATH | append ($nu.home-path | path join ".asdf" "bin"))'
-  echo '$env.PATH = ($env.PATH | append ($nu.home-path | path join ".asdf" "shims"))'
-} >> ~/.config/nushell/env.nu
-
 msg "Instalando git-delta..."
-curl -s -LO https://github.com/dandavison/delta/releases/download/0.16.5/git-delta_0.16.5_amd64.deb
-sudo dpkg -i git-delta_0.16.5_amd64.deb &> /dev/null
-rm git-delta_0.16.5_amd64.deb
-
-msg "Instalando o Visual Studio Code..."
-wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-sudo install -o root -g root -m 644 packages.microsoft.gpg /usr/share/keyrings/ &> /dev/null
-sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-rm -f packages.microsoft.gpg
-sudo apt update -qq > /dev/null 2>&1
-sudo apt install -y -qq code > /dev/null 2>&1
+DELTA_VERSION="0.18.2"
+curl -s -LO https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta_${DELTA_VERSION}_amd64.deb
+sudo dpkg -i git-delta_${DELTA_VERSION}_amd64.deb
+rm git-delta_${DELTA_VERSION}_amd64.deb
 
 msg "Instalando o Docker..."
 {
@@ -139,37 +123,54 @@ pidof systemd >/dev/null && sudo systemctl enable --now docker >/dev/null 2>&1 |
 docker --version
 docker compose version
 
-msg "Instalando o asdf..."
-{
-[ ! -d "$HOME_DIR/.asdf" ] && \
-    git clone https://github.com/asdf-vm/asdf.git "$HOME_DIR/.asdf" --branch v0.18.0 >/dev/null 2>&1
+msg "Instalando asdf (versão binária)..."
+ASDF_VERSION="v0.18.0"
+ASDF_DIR="$HOME_DIR/.asdf-bin"
+ARCHIVE_NAME="asdf-${ASDF_VERSION}-linux-amd64.tar.gz"
 
-export ASDF_DIR="$HOME_DIR/.asdf"
-export PATH="$ASDF_DIR/bin:$ASDF_DIR/shims:$PATH"
-. "$ASDF_DIR/asdf.sh" >/dev/null 2>&1
-} >/dev/null 2>&1
+mkdir -p "$ASDF_DIR"
+cd "$ASDF_DIR"
+curl -sLO "https://github.com/asdf-vm/asdf/releases/download/${ASDF_VERSION}/${ARCHIVE_NAME}"
+tar -xzf "$ARCHIVE_NAME"
+rm "$ARCHIVE_NAME"
+
+echo "export PATH=\"$ASDF_DIR:\$PATH\"" >> "$HOME_DIR/.bashrc"
+export PATH="$ASDF_DIR:$PATH"
+
+if ! command -v asdf >/dev/null; then
+    msg "❌ asdf não foi adicionado ao PATH corretamente."
+    exit 1
+else
+    msg "✅ asdf instalado com sucesso!"
+fi
+
+msg "Instalando zoxide via asdf..."
+asdf plugin add zoxide https://github.com/nyrst/asdf-zoxide.git 2>&1
+asdf install zoxide latest 2>&1
+asdf set zoxide latest 2>&1
 
 msg "Instalando Ruby via asdf..."
-{
-asdf plugin-add ruby https://github.com/asdf-vm/asdf-ruby.git >/dev/null 2>&1 || true
-asdf install ruby latest >/dev/null 2>&1
-asdf global ruby latest >/dev/null 2>&1
-} >/dev/null 2>&1
+RUBY_VERSION="3.2.0"
+asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git || true
+asdf install ruby $RUBY_VERSION
+asdf set ruby $RUBY_VERSION
+
+msg "Adicionando Ruby ao PATH (nova versão do asdf)..."
+RUBY_BIN_PATH="$HOME_DIR/.asdf/installs/ruby/$RUBY_VERSION/bin"
+export PATH="$RUBY_BIN_PATH:$PATH"
+echo "export PATH=\"$RUBY_BIN_PATH:\$PATH\"" >> "$HOME_DIR/.bashrc"
+echo ruby -v
 
 msg "Instalando gems adicionais..."
-{
-gem install pry-theme amazing_print pry-byebug >/dev/null 2>&1
+gem install pry-theme amazing_print pry-byebug
 
-cp -r ./config/.pry/ "$HOME_DIR/.pry/" 2>/dev/null || true
-cp ./config/.pryrc "$HOME_DIR/.pryrc" 2>/dev/null || true
-cp ./config/.irbrc "$HOME_DIR/.irbrc" 2>/dev/null || true
-cp ./config/.aprc "$HOME_DIR/.aprc" 2>/dev/null || true
+mkdir -p "$HOME_DIR/.pry"
+cp -r "$PROJECT_DIR/config/.pry/" "$HOME_DIR/.pry/"
+cp "$PROJECT_DIR/config/.pryrc" "$HOME_DIR/.pryrc"
+cp "$PROJECT_DIR/config/.irbrc" "$HOME_DIR/.irbrc" 
+cp "$PROJECT_DIR/config/.aprc" "$HOME_DIR/.aprc"
+sudo chown -R "$USER_NAME:$USER_NAME" "$HOME_DIR"
 
-sudo chown -R "$USER_NAME:$USER_NAME" "$HOME_DIR" >/dev/null 2>&1
-} >/dev/null 2>&1
-
-docker --version
-docker compose version
 msg "Instalação concluída com sucesso!"
 
 nu
