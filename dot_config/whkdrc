@@ -2,7 +2,7 @@
 
 # Reload whkd configuration
 # alt + o                 : taskkill /f /im whkd.exe && start /b whkd # if shell is cmd
-alt + ctrl + o                 : taskkill /f /im whkd.exe; Start-Process whkd -WindowStyle hidden # if shell is pwsh / powershell
+alt + ctrl + o          : taskkill /f /im whkd.exe; Start-Process whkd -WindowStyle hidden # if shell is pwsh / powershell
 alt + shift + o         : komorebic reload-configuration
 
 alt + i                 : komorebic toggle-shortcuts
@@ -22,8 +22,8 @@ alt + h                 : komorebic focus left
 alt + j                 : komorebic focus down
 alt + k                 : komorebic focus up
 alt + l                 : komorebic focus right
-alt + shift + oem_4     : komorebic cycle-focus previous # oem_4 is [
-alt + shift + oem_6     : komorebic cycle-focus next # oem_6 is ]
+alt + oem_4     				: komorebic cycle-focus previous # oem_4 is [
+alt + oem_6     				: komorebic cycle-focus next # oem_6 is ]
 
 # Move windows
 alt + shift + h         : komorebic move left
@@ -43,8 +43,8 @@ alt + ctrl + down       : komorebic stack down
 alt + ctrl + up         : komorebic stack up
 alt + ctrl + right      : komorebic stack right
 alt + ctrl + u          : komorebic unstack # oem_1 is ;
-alt + oem_4             : komorebic cycle-stack previous # oem_4 is [
-alt + oem_6             : komorebic cycle-stack next # oem_6 is ]
+alt + ctrl + oem_4     : komorebic cycle-stack previous # oem_4 is [
+alt + ctrl + oem_6     : komorebic cycle-stack next # oem_6 is ]
 
 # Resize
 alt + oem_plus          : komorebic resize-axis horizontal increase
