@@ -11,7 +11,6 @@ alt + i                 : komorebic toggle-shortcuts
 # The apps will be focused if open, or launched if not open
 # alt + f                 : if ($wshell.AppActivate('Firefox') -eq $False) { start firefox }
 alt + b                 : if ($wshell.AppActivate('Chrome') -eq $False) { start chrome }
-alt + v                 : if ($wshell.AppActivate('Visual Studio Code') -eq $False) { start code }
 alt + e 								: if ($wshell.AppActivate('Edge') -eq $False) { start edge }
 
 alt + shift + q         : komorebic close
@@ -37,7 +36,11 @@ alt + shift + down      : komorebic move down
 alt + shift + up        : komorebic move up
 alt + shift + right     : komorebic move right
 
+win + shift + right       : komorebic move-to-monitor 0; komorebicfocus-monitor-next
+win + shift + left        : komorebic move-to-monitor 1; komorebic focus-monitor-prev
+
 # Stack windows
+alt + ctrl + a  				: komorebic stack-all
 alt + ctrl + left       : komorebic stack left
 alt + ctrl + down       : komorebic stack down
 alt + ctrl + up         : komorebic stack up
@@ -53,7 +56,7 @@ alt + shift + oem_plus  : komorebic resize-axis vertical increase
 alt + shift + oem_minus : komorebic resize-axis vertical decrease
 
 # Manipulate windows
-alt + t                 : komorebic toggle-float
+alt + shift + t         : komorebic toggle-float
 alt + shift + f         : komorebic toggle-monocle
 
 # Window manager options
@@ -64,15 +67,21 @@ alt + shift + p         : komorebic toggle-pause
 alt + shift + x         : komorebic flip-layout horizontal
 alt + shift + y         : komorebic flip-layout vertical
 
+# example showing how you might bind this command
+
+win + 1                 : komorebic eager-focus Code.exe
+win + 2                	: komorebic eager-focus alacritty.exe
+win + 3                	: komorebic eager-focus msedge.exe
+
 # Workspaces
-alt + 1                 : komorebic focus-workspace 0
-alt + 2                 : komorebic focus-workspace 1
-alt + 3                 : komorebic focus-workspace 2
-alt + 4                 : komorebic focus-workspace 3
-alt + 5                 : komorebic focus-workspace 4
-alt + 6                 : komorebic focus-workspace 5
-alt + 7                 : komorebic focus-workspace 6
-alt + 8                 : komorebic focus-workspace 7
+alt + ctrl + 1                 : komorebic focus-workspace 0
+alt + ctrl + 2                 : komorebic focus-workspace 1
+alt + ctrl + 3                 : komorebic focus-workspace 2
+alt + ctrl + 4                 : komorebic focus-workspace 3
+alt + ctrl + 5                 : komorebic focus-workspace 4
+alt + ctrl + 6                 : komorebic focus-workspace 5
+alt + ctrl + 7                 : komorebic focus-workspace 6
+alt + ctrl + 8                 : komorebic focus-workspace 7
 
 # Move windows across workspaces
 alt + shift + 1         : komorebic move-to-workspace 0
