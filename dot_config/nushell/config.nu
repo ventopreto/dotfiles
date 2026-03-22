@@ -26,7 +26,4 @@ starship init nu
 # source ~/.cache/mise.nu
 
 # Scripts
-source ~/.config/nushell/scripts/dev_project.nu
-source ~/.config/nushell/scripts/payments.nu
-source ~/.config/nushell/scripts/dockerlogin.nu
 source ~/.zoxide.nu
