@@ -39,6 +39,33 @@ install_linux_base_packages() {
         apt-utils
 }
 
+install_bitwarden_cli() {
+    local home_dir="$1"
+    local bw_version="1.22.1"
+    local bw_zip="bw-linux-${bw_version}.zip"
+    local download_url="https://github.com/bitwarden/cli/releases/download/v${bw_version}/${bw_zip}"
+    local tmp_dir
+    local target_dir="$home_dir/.local/bin"
+    local target_bin="$target_dir/bw"
+    local current_bw=""
+
+    msg "Instalando Bitwarden CLI..."
+
+    current_bw="$(command -v bw || true)"
+    if [ -n "$current_bw" ] && [ "$current_bw" != "/snap/bin/bw" ]; then
+        info "Bitwarden CLI ja instalado; pulando"
+        return
+    fi
+
+    tmp_dir="$(mktemp -d)"
+    ensure_directory "$target_dir"
+
+    curl -fsSL "$download_url" -o "$tmp_dir/$bw_zip"
+    unzip -qo "$tmp_dir/$bw_zip" -d "$tmp_dir"
+    install -m 0755 "$tmp_dir/bw" "$target_bin"
+    rm -rf "$tmp_dir"
+}
+
 install_linux_fonts() {
     local project_dir="$1"
     local home_dir="$2"
@@ -208,6 +235,7 @@ bootstrap_linux_host() {
     sudo usermod -aG docker "$user_name" >/dev/null 2>&1 || true
     install_asdf_stack "$project_dir" "$home_dir"
     install_linux_chezmoi "$home_dir"
+    install_bitwarden_cli "$home_dir"
 
     msg "Aplicando dotfiles Linux/WSL com chezmoi..."
     apply_chezmoi_from_source "$project_dir" || warn "chezmoi apply falhou"
