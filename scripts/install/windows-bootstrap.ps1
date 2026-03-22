@@ -1,38 +1,73 @@
-Set-StrictMode -Version Latest
-$ErrorActionPreference = "Stop"
-
 param(
     [string]$RepoSource = "",
     [string]$RepoUrl = ""
 )
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
 
 function Write-Step {
     param([string]$Message)
     Write-Host "==> $Message" -ForegroundColor Green
 }
 
-function Install-WingetPackage {
-    param([string]$Id)
+function Write-Info {
+    param([string]$Message)
+    Write-Host "  -> $Message" -ForegroundColor DarkGray
+}
 
-    winget install --exact --id $Id --accept-package-agreements --accept-source-agreements --silent
+function Resolve-WingetCommand {
+    $candidate = Get-Command winget -ErrorAction SilentlyContinue
+    if ($candidate) {
+        return $candidate.Path
+    }
+
+    $candidate = Get-Command winget.exe -ErrorAction SilentlyContinue
+    if ($candidate) {
+        return $candidate.Path
+    }
+
+    return $null
+}
+
+function Install-WingetPackage {
+    param(
+        [string]$WingetPath,
+        [string]$Id
+    )
+
+    & $WingetPath install --exact --id $Id --accept-package-agreements --accept-source-agreements --silent
+}
+
+function Test-CommandExists {
+    param([string]$CommandName)
+
+    return [bool](Get-Command $CommandName -ErrorAction SilentlyContinue)
 }
 
 Write-Step "Verificando winget"
-if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-    throw "winget nao encontrado no Windows"
+$wingetPath = Resolve-WingetCommand
+if (-not $wingetPath) {
+    throw "winget nao encontrado no PATH desta sessao. Confirme se o App Installer/winget esta instalado e acessivel neste PowerShell."
 }
+Write-Info "winget: $wingetPath"
 
 Write-Step "Instalando dependencias Windows"
 $packages = @(
-    "Alacritty.Alacritty",
-    "LGUG2Z.komorebi",
-    "LGUG2Z.whkd",
-    "AmN.yasb",
-    "twpayne.chezmoi"
+    @{ Id = "Alacritty.Alacritty"; Command = "alacritty.exe" },
+    @{ Id = "LGUG2Z.komorebi"; Command = "komorebic.exe" },
+    @{ Id = "LGUG2Z.whkd"; Command = "whkd.exe" },
+    @{ Id = "AmN.yasb"; Command = "yasb.exe" },
+    @{ Id = "twpayne.chezmoi"; Command = "chezmoi.exe" }
 )
 
 foreach ($package in $packages) {
-    Install-WingetPackage -Id $package
+    if (Test-CommandExists -CommandName $package.Command) {
+        Write-Info "$($package.Id) ja disponivel como $($package.Command); pulando instalacao"
+        continue
+    }
+
+    Install-WingetPackage -WingetPath $wingetPath -Id $package.Id
 }
 
 Write-Step "Aplicando dotfiles Windows com chezmoi"
@@ -42,12 +77,12 @@ if (-not $chezmoi) {
 }
 
 if ($RepoSource -and (Test-Path $RepoSource)) {
-    & $chezmoi.Source apply --source $RepoSource
+    & $chezmoi.Path apply --source $RepoSource
     exit $LASTEXITCODE
 }
 
 if ($RepoUrl) {
-    & $chezmoi.Source init --apply $RepoUrl
+    & $chezmoi.Path init --apply $RepoUrl
     exit $LASTEXITCODE
 }
 

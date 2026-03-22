@@ -9,7 +9,7 @@ install.sh
 scripts/**
 
 {{- if eq .chezmoi.os "linux" }}
-.komorebi.json
+komorebi.json
 .config/whkdrc
 .config/yasb/**
 {{- end }}
@@ -17,6 +17,7 @@ scripts/**
 {{- if eq .chezmoi.os "windows" }}
 .config/nushell/**
 .config/nvim/**
+.config/starship.toml
 .config/yazi/**
 .config/zellij/**
 .tmux.conf
@@ -26,5 +27,5 @@ scripts/**
 .irbrc
 .pry/**
 .pryrc
-.local/bin/yazi-smart-preview
+.local/bin/**
 {{- end }}
