@@ -1,7 +1,7 @@
 # env.nu
 #
 # Installed by:
-# version = "0.103.0"
+# version = "0.110.0"
 #
 # Previously, environment variables were typically configured in `env.nu`.
 # In general, most configuration can and should be performed in `config.nu`
@@ -21,17 +21,33 @@ $env.PATH = [
   $"($env.HOME)/bin",
   "/home/linuxbrew/.linuxbrew/bin",
   $"($env.HOME)/.local/bin",
-  $"($env.HOME)/.asdf/bin",
-  $"($env.HOME)/.asdf/shims",
   "/snap/bin",
   "/usr/local/bin",
   "/usr/bin",
-  "/bin"
+  "/bin",
 ] | append $env.PATH
 
-$env.ASDF_DATA_DIR = $"($env.HOME)/.asdf"
+
+$"($env.HOME)/.asdf/bin",
+$"($env.HOME)/.asdf/shims",
+
+$env.BUN_INSTALL = $"($env.HOME)/.bun"
+$env.PATH = ($env.PATH | prepend ($env.BUN_INSTALL | path join "bin"))
+
+
+# $env.ASDF_DATA_DIR = $"($env.HOME)/.asdf"
+$env.LC_TIME = "pt_BR.UTF-8"
 
 $env.DISABLE_SPRING = "1"
 $env.STARSHIP_SHELL = "nu"
-
+$env.EDITOR = "nvim"
+$env.VISUAL = "nvim"
+# Load secrets from the parent environment when present.
+if ("GEMINI_API_KEY" in $env) {
+    $env.GEMINI_API_KEY = $env.GEMINI_API_KEY
+}
+if ("PAT" in $env) {
+    $env.PAT = $env.PAT
+}
+# ^mise activate nu | save --force ~/.cache/mise.nu
 zoxide init nushell | save -f ~/.zoxide.nu

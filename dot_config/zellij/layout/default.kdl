@@ -1,0 +1,87 @@
+layout {
+   swap_tiled_layout name="vertical" {
+       tab max_panes=5 {
+           pane split_direction="vertical" {
+               pane
+               pane { children; }
+           }
+       }
+       tab max_panes=8 {
+           pane split_direction="vertical" {
+               pane { children; }
+               pane { pane; pane; pane; pane; }
+           }
+       }
+       tab max_panes=12 {
+           pane split_direction="vertical" {
+               pane { children; }
+               pane { pane; pane; pane; pane; }
+               pane { pane; pane; pane; pane; }
+           }
+       }
+   }
+
+    default_tab_template {
+        children
+        pane size=1 borderless=true {
+            plugin location="zjstatus" {
+                format_left   "{mode} #[fg=#89B4FA,bold]{session}"
+                format_center "{tabs}"
+                format_right  "{command_git_branch} {datetime}"
+                format_space  ""
+
+                border_enabled  "false"
+                border_char     "─"
+                border_format   "#[fg=#6C7086]{char}"
+                border_position "top"
+
+                hide_frame_for_single_pane "true"
+
+
+                mode_normal        "#[bg=#89B4FA,fg=#2E3440,bold] NORMAL #[bg=#3B4252,fg=#A3BE8C]█"
+                mode_locked        "#[bg=#D08770,fg=#2E3440,bold] LOCKED  #[bg=#3B4252,fg=#D08770]█"
+                mode_resize        "#[bg=#BF616A,fg=#2E3440,bold] RESIZE #[bg=#3B4252,fg=#BF616A]█"
+                mode_pane          "#[bg=#81A1C1,fg=#2E3440,bold] PANE #[bg=#3B4252,fg=#81A1C1]█"
+                mode_tab           "#[bg=#EBCB8B,fg=#2E3440,bold] TAB #[bg=#3B4252,fg=#EBCB8B]█"
+                mode_scroll        "#[bg=#B48EAD,fg=#2E3440,bold] SCROLL #[bg=#3B4252,fg=#B48EAD]█"
+                mode_enter_search  "#[bg=#88C0D0,fg=#2E3440,bold] ENT-SEARCH #[bg=#3B4252,fg=#88C0D0]█"
+                mode_search        "#[bg=#88C0D0,fg=#2E3440,bold] SEARCH #[bg=#3B4252,fg=#88C0D0]█"
+                mode_rename_tab    "#[bg=#E5E9F0,fg=#2E3440,bold] RENAME-TAB #[bg=#3B4252,fg=#E5E9F0]█"
+                mode_rename_pane   "#[bg=#88C0D0,fg=#2E3440,bold] RENAME-PANE #[bg=#3B4252,fg=#88C0D0]█"
+                mode_session       "#[bg=#5E81AC,fg=#D8DEE9,bold] SESSION #[bg=#3B4252,fg=#5E81AC]█"
+                mode_move          "#[bg=#ECEFF4,fg=#2E3440,bold] MOVE #[bg=#3B4252,fg=#ECEFF4]█"
+                mode_prompt        "#[bg=#88C0D0,fg=#2E3440,bold] PROMPT #[bg=#3B4252,fg=#88C0D0]█"
+                mode_tmux          "#[bg=#81A1C1,fg=#2E3440,bold] TMUX #[bg=#3B4252,fg=#81A1C1]█"
+
+
+                tab_normal   "#[fg=#6C7086] {name} "
+                tab_active   "#[fg=#9399B2,bold,italic] {name} "
+
+                command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
+                command_git_branch_format      "#[fg=blue] {stdout} "
+                command_git_branch_interval    "10"
+                command_git_branch_rendermode  "static"
+
+                datetime        "#[fg=#6C7086,bold] {format} "
+                datetime_format "%c"
+                datetime_timezone "America/Fortaleza"
+            }
+        }
+    }
+    tab name="󰎦 Server" focus=true borderless=true
+    tab name="󰎩 Console"
+    tab name="󰎬"
+}
+env {
+    LC_TIME "pt_BR.UTF-8"
+}
+
+keybinds {
+    shared {
+        bind "Alt 1" { NewTab name="dev"; }
+        bind "Alt 2" { GoToNextTab; }
+        bind "Alt 3" { CloseTab; }
+        bind "Alt 4" { NewPane; }
+        bind "Alt 5" { CloseFocus; }
+    }
+}

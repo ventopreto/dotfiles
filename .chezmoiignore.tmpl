@@ -1,0 +1,30 @@
+.gitignore
+.nvimlog
+.ruby-lsp/**
+CHEZMOI_LAYOUT.md
+Dockerfile
+README.md
+fonts/**
+install.sh
+scripts/**
+
+{{- if eq .chezmoi.os "linux" }}
+.komorebi.json
+.config/whkdrc
+.config/yasb/**
+{{- end }}
+
+{{- if eq .chezmoi.os "windows" }}
+.config/nushell/**
+.config/nvim/**
+.config/yazi/**
+.config/zellij/**
+.tmux.conf
+.aliases
+.aprc
+.gitconfig
+.irbrc
+.pry/**
+.pryrc
+.local/bin/yazi-smart-preview
+{{- end }}

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -eu
+
+if [ -n "${ZELLIJ:-}" ]; then
+    exec env TERM=xterm-kitty yazi "$@"
+fi
+
+exec yazi "$@"

@@ -1,13 +1,24 @@
-alias ne = code ~/.config/nushell/config.nu
-alias ae = code ~/.config/nushell/aliases.nu
+alias ne = nvim ~/.config/nushell/config.nu
+alias ae = nvim ~/.config/nushell/aliases.nu
 alias ll = ls -lh
 alias gs = git status
 alias ga = git add .
 alias gp = git push
+alias zl = zellij
+alias zls = zl ls
+alias zld = zl d
+alias zla = zl a
+alias ld = lazydocker
+alias ze = code ~/.config/zellij/config.kdl
+alias czs = clear_zellij_sessions
+alias irule = sudo chown -R $env.USER .
+alias v = nvim
 
 # Alias para iniciar o tmux
 alias ts = tmux new-session -A -s main
 alias tks = tmux kill-server
+alias te = void ~/.tmux.conf
+alias tr = tmux source ~/.tmux.conf
 alias eipb = cd ~/workspace/eagle-ip-backend
 
 # Alias rails
@@ -17,7 +28,9 @@ alias berc = bundle exec rails c
 alias mswag = rake rswag:specs:swaggerize
 alias dc = docker compose
 alias dcewb = dc exec web bash
-alias da = docker attach
+alias dcrwb = dc run web bash
+alias dcub = dc up --build
+alias da = docker attach (docker ps --filter "name=web" --format "{{.ID}}")
 
 # Git Aliases
 alias gs = git status
