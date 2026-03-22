@@ -34,6 +34,10 @@ sudo apt install -y -qq \
     curl \
     wget \
     git \
+    neovim \
+    ripgrep \
+    fd-find \
+    xclip \
     lsb-release \
     apt-transport-https \
     ca-certificates \
@@ -78,6 +82,10 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --yes > /dev/null
 
 msg "Configurando Nushell..."
 cp -r "$PROJECT_DIR/config/.config/" ~/ &> /dev/null
+
+msg "Configurando o Neovim..."
+mkdir -p "$HOME_DIR/.config"
+cp -r "$PROJECT_DIR/.config/nvim" "$HOME_DIR/.config/"
 
 msg "Definindo o Nushell como shell padrão..."
 chsh -s $(which nu)
