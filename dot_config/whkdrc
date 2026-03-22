@@ -12,6 +12,9 @@ alt + i                 : komorebic toggle-shortcuts
 # alt + f                 : if ($wshell.AppActivate('Firefox') -eq $False) { start firefox }
 alt + b                 : if ($wshell.AppActivate('Chrome') -eq $False) { start chrome }
 alt + e 								: if ($wshell.AppActivate('Edge') -eq $False) { start edge }
+win + return 						: if ($wshell.AppActivate('alacritty') -eq $False) { start alacritty }
+
+
 
 alt + shift + q         : komorebic close
 alt + shift + m         : komorebic minimize
@@ -21,8 +24,8 @@ alt + h                 : komorebic focus left
 alt + j                 : komorebic focus down
 alt + k                 : komorebic focus up
 alt + l                 : komorebic focus right
-alt + oem_4     				: komorebic cycle-focus previous # oem_4 is [
-alt + oem_6     				: komorebic cycle-focus next # oem_6 is ]
+alt + ctrl + oem_4     				: komorebic cycle-focus previous # oem_4 is [
+alt + ctrl + oem_6     				: komorebic cycle-focus next # oem_4 is ]
 
 # Move windows
 alt + shift + h         : komorebic move left
@@ -46,8 +49,8 @@ alt + ctrl + down       : komorebic stack down
 alt + ctrl + up         : komorebic stack up
 alt + ctrl + right      : komorebic stack right
 alt + ctrl + u          : komorebic unstack # oem_1 is ;
-alt + ctrl + oem_4     : komorebic cycle-stack previous # oem_4 is [
-alt + ctrl + oem_6     : komorebic cycle-stack next # oem_6 is ]
+alt + oem_4     : komorebic cycle-stack previous # oem_4 is [
+alt + oem_6     : komorebic cycle-stack next # oem_6 is ]
 
 # Resize
 alt + oem_plus          : komorebic resize-axis horizontal increase
