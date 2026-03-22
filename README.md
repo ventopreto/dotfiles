@@ -51,7 +51,7 @@ Arquivos Linux/WSL vivem principalmente em:
 
 Arquivos Windows vivem principalmente em:
 
-- `private_dot_komorebi.json.tmpl`
+- `private_komorebi.json.tmpl`
 - `dot_config/whkdrc`
 - `dot_config/yasb`
 

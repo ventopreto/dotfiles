@@ -76,7 +76,7 @@ dotfiles/
 ├── dot_local/
 │   └── bin/
 │       └── yazi-smart-preview
-├── private_dot_komorebi.json.tmpl
+├── private_komorebi.json.tmpl
 ├── .chezmoiignore.tmpl
 └── .chezmoi.toml.tmpl
 ```
@@ -88,7 +88,7 @@ dotfiles/
 - `dot_aprc` becomes `~/.aprc`
 - `dot_config/nvim` becomes `~/.config/nvim`
 - `dot_local/bin/yazi-smart-preview` becomes `~/.local/bin/yazi-smart-preview`
-- `private_dot_komorebi.json.tmpl` becomes `~/komorebi.json`
+- `private_komorebi.json.tmpl` becomes `~/komorebi.json`
 
 This removes the current ambiguity between:
 
@@ -117,7 +117,7 @@ Use one repo, but let `chezmoi` decide what to apply.
 
 ### Windows managed files
 
-- `private_dot_komorebi.json.tmpl`
+- `private_komorebi.json.tmpl`
 - `dot_config/whkdrc`
 - `dot_config/yasb/**`
 - `dot_config/alacritty/**` if Windows Alacritty is the one you use
@@ -128,7 +128,7 @@ Use `.chezmoiignore.tmpl` to keep each environment clean:
 
 ```tmpl
 {{- if eq .chezmoi.os "linux" }}
-private_dot_komorebi.json.tmpl
+komorebi.json
 dot_config/whkdrc
 dot_config/yasb/**
 {{- end }}
@@ -177,7 +177,7 @@ Current Windows-ish repo files:
 
 - `dot_config/whkdrc` -> keep as `dot_config/whkdrc`
 - `dot_config/yasb/**` -> keep as `dot_config/yasb/**`
-- `komorebi.json.tmpl` -> `private_dot_komorebi.json.tmpl`
+- `komorebi.json.tmpl` -> `private_komorebi.json.tmpl`
 
 Current loose `chezmoi` source:
 
