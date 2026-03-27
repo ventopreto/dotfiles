@@ -45,17 +45,12 @@ $env.VISUAL = "nvim"
 
 source ~/.config/nushell/scripts/bitwarden.nu
 
-# Load secrets from the parent environment when present.
-if ("GEMINI_API_KEY" in $env) {
-    $env.GEMINI_API_KEY = $env.GEMINI_API_KEY
-}
-if ("PAT" in $env) {
-    $env.PAT = $env.PAT
-}
-
-# Try Bitwarden as a secondary source when env vars are not already present.
-if not ("GEMINI_API_KEY" in $env) or not ("PAT" in $env) {
-    do -i { load-bitwarden-secrets }
+# Load secrets from parent env or cache (instant).
+# Run `refresh-bw-secrets` to update the cache from Bitwarden.
+if ("GEMINI_API_KEY" in $env) and ("PAT" in $env) {
+    # Already inherited from parent — nothing to do.
+} else {
+    do -i { load-cached-secrets }
 }
 
 # ^mise activate nu | save --force ~/.cache/mise.nu
