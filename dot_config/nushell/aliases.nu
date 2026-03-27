@@ -14,7 +14,6 @@ alias ze = code ~/.config/zellij/config.kdl
 alias czs = clear_zellij_sessions
 alias irule = sudo chown -R $env.USER .
 alias v = nvim
-alias yolo = claude --dangerously-skip-permissions
 
 # Alias para iniciar o tmux
 alias ts = tmux new-session -A -s main
