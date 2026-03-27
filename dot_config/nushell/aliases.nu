@@ -1,5 +1,6 @@
 alias ne = nvim ~/.config/nushell/config.nu
 alias ae = nvim ~/.config/nushell/aliases.nu
+def --wrapped yolo [...args] { claude --dangerously-skip-permissions ...$args }
 alias ll = ls -lh
 alias gs = git status
 alias ga = git add .
